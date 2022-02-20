@@ -1,22 +1,15 @@
 import React, { useCallback, useState } from 'react';
 import { Success, Form, Error, Label, Input, LinkContainer, Button, Header } from './styles';
 import { Link } from 'react-router-dom';
+import useInput from '@hooks/useInput';
 
 const SignUp = () => {
-  const [email, setEmail] = useState('');
-  const [nickname, setNickname] = useState('');
-  const [password, setPassword] = useState('');
-  const [passwordCheck, setPasswordCheck] = useState('');
+  const [email, onChangeEmail] = useInput('');
+  const [nickname, onChangeNickname] = useInput('');
+  // useInput 같이 사용하고 싶지만 함수 코드가 다른겅우 , , 빈 값으로 둔다.
+  const [password, , setPassword] = useInput('');
+  const [passwordCheck, , setPasswordCheck] = useInput('');
   const [mismatchError, setMismatchError] = useState(false);
-
-  const onChangeEmail = useCallback((e) => {
-    setEmail(e.target.value);
-    // 함수 기준으로 외부 변수일 경우에만 적어준다. (e.target.value는 안적는 이유)
-  }, []);
-
-  const onChangeNickname = useCallback((e) => {
-    setNickname(e.target.value);
-  }, []);
 
   const onChangePassword = useCallback(
     (e) => {
