@@ -1,0 +1,28 @@
+{
+  "compilerOptions": {
+    "esModuleInterop": true, // import * as React from 'react'; 와 같이 * as를 붙여하는데 esModuleInterop시 * as 없이 사용 가능
+    "sourceMap": true, // 에러 발생시 에러 발생한 위치를 찾아갈 때 편리
+    "lib": ["ES2020", "DOM"], // 라이브러리
+    "jsx": "react", // jsx가 다른 프로그램에서도 쓰이기 때문에 다르게 인식 될 수있는걸 react걸로 사용하겠다 지정
+    "module": "esnext", // 최신 모듈 사용하겠다. (import, export)
+    "moduleResolution": "Node", // node가 해성할 수 있도록
+    "target": "es5", // es5로 변환하겠다.
+    "strict": true, // 타입 체킹을 엄격하게 하겠다. (** 필수로 사용하는 것이 좋다!)
+    "resolveJsonModule": true, // import json파일 허락하겠다.
+    "baseUrl": ".",
+    "paths": {
+      // import 시에 ../../../hellow.js 복잡한 경로를 paths설정하여 @src/hellow.js 와 같이 절대경로처럼 사용할 수 있다. (필수X)
+      "@hooks/*": ["hooks/*"],
+      "@components/*": ["components/*"],
+      "@layouts/*": ["layouts/*"],
+      "@pages/*": ["pages/*"],
+      "@utils/*": ["utils/*"],
+      "@typings/*": ["typings/*"]
+    }
+  }
+}
+
+// 타입스크립트를 자바스크립트로 변환하는 방법
+// 1. 타입스크립트가 자바스크립트로 바꿔주는 대로 사용
+// 2. 타입스크립트를 바벨로 변환하고 바벨이 자바스크립트로 변환하여 사용
+//    : 바벨을 사용하는 이유는 html, css, img 등의 파일을 자바스크립트로 변환가능하기 때문에

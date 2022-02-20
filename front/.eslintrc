@@ -1,0 +1,4 @@
+// eslint의 설정을 따르겠다.
+{
+  "extends": ["plugin:prettier/recommended", "react-app"]
+}
