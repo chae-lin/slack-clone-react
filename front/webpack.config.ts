@@ -93,13 +93,13 @@ const config: Configuration = {
     devMiddleware: { publicPath: '/dist/' },
     static: { directory: path.resolve(__dirname) },
     // cors에러 프론트에서 해결하기
-    // proxy: {
-    //   '/api/': {
-    //     target: 'http://localhost:3095',
-    //     changeOrigin: true,
-    //     ws: true,
-    //   },
-    // },
+    proxy: {
+      '/api/': {
+        target: 'http://localhost:3095',
+        changeOrigin: true,
+        ws: true,
+      },
+    },
   },
 };
 

@@ -40,10 +40,11 @@ const SignUp = () => {
         setSignUpSuccese(false);
         axios
           // webpack.congig에서 proxy 설정한 경우
-          // .post('/api/users', { email, nickname, password })
-          // 위의 경우는 3095에서 3095로 보내는 것.
+
+          // 아래의 경우는 3095에서 3095로 보내는 것.
+          // .post('http://localhost:3095/api/users', { email, nickname, password })
           // 아래의 경우는 3090에서 3095로 보내는 것
-          .post('http://localhost:3095/api/users', { email, nickname, password })
+          .post('/api/users', { email, nickname, password })
           // 성공
           .then((response) => {
             setSignUpSuccese(true);
@@ -103,6 +104,7 @@ const SignUp = () => {
       </Form>
       <LinkContainer>
         이미 회원이신가요?&nbsp;
+        {/* 리액트 라우터에서는 Link 를 이용해서 페이지 이동. a태그를 이용할 경우 새로고침이 됨. */}
         <Link to="/login">로그인 하러가기</Link>
       </LinkContainer>
     </div>
