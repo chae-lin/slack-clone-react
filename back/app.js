@@ -33,6 +33,8 @@ if (prod) {
   app.use(hpp());
 } else {
   app.use(morgan("dev"));
+  // 다른 포트로 요청을 보낼 수 있도록 해주는 장치 cors에러
+  // 프론트에서 해결하려 할 경우 webpack.config에서 proxy 설정해주어야 한다.
   app.use(
     cors({
       origin: true,
