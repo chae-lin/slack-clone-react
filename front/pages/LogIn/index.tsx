@@ -11,7 +11,11 @@ const LogIn = () => {
   // useSWR은 주소를 fetcher로 옮겨주는 역활만 함
   // fetcher에서 보내준 response.data가 data에 들어옴.
   // 로그인 성공시 mutate가 실행되어 fetcher가 바로 실행됨.
-  const { data, error, mutate } = useSWR('/api/users', fetcher, {
+  const {
+    data: userData,
+    error,
+    mutate: revalidateUser,
+  } = useSWR('/api/users', fetcher, {
     // - 주기적으로 호출은 되지만 dedupingInterval 기간 내에는 캐시에서 불러온다.v (기본 값은 2000:2초)
     // dedupingInterval: 100000,
     // - revalidate 시간 설정
@@ -45,7 +49,8 @@ const LogIn = () => {
           { withCredentials: true },
         )
         .then(() => {
-          mutate();
+          // 성공하면 useSWR('/api/users', fetcher 다시 실행되어 data에 내정보가 들어 있음.
+          revalidateUser();
         })
         .catch((error) => {
           setLogInError(error.response?.data?.code === 401);
@@ -53,6 +58,15 @@ const LogIn = () => {
     },
     [email, password],
   );
+
+  if (userData === undefined) {
+    return <div>로딩중...</div>;
+  }
+
+  if (userData) {
+    // 페이지를 /workspace/channel로 옮긴다.
+    return <Redirect to="/workspace/channel" />;
+  }
 
   return (
     <div id="container">

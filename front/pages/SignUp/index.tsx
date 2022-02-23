@@ -1,10 +1,15 @@
 import React, { useCallback, useState } from 'react';
 import { Success, Form, Error, Label, Input, LinkContainer, Button, Header } from './styles';
 import axios from 'axios';
-import { Link } from 'react-router-dom';
+import { Link, Redirect } from 'react-router-dom';
 import useInput from '@hooks/useInput';
+import useSWR from 'swr';
+import fetcher from '@utils/fetcher';
 
 const SignUp = () => {
+  // 로그인한 상태에서 로그인페이지로 진입하는 경우 메인으로 되돌리기 위해 쿠키가져옴
+  const { data: userData } = useSWR('/api/users', fetcher);
+
   const [email, onChangeEmail] = useInput('');
   const [nickname, onChangeNickname] = useInput('');
   // useInput 같이 사용하고 싶지만 함수 코드가 다른겅우 , , 빈 값으로 둔다.
@@ -61,6 +66,14 @@ const SignUp = () => {
     },
     [email, nickname, password, passwordCheck],
   );
+
+  if (userData === undefined) {
+    return <div>로딩중...</div>;
+  }
+
+  if (userData === false) {
+    return <Redirect to="/workspace/channel" />;
+  }
 
   return (
     <div id="container">
