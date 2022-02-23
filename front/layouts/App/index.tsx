@@ -11,7 +11,7 @@ import { Switch, Route, Redirect } from 'react-router-dom';
 // 코드 스플리팅을 할때에 어떠한 기준으로 나눌 것이냐에 대한 기준을 세우기가 어려운데 일단은 라우트 기준으로 나누어 보는것을 많은 사람들과 공식문서에서 추천하고 있다.
 const LogIn = loadable(() => import('@pages/LogIn'));
 const SignUp = loadable(() => import('@pages/SignUp'));
-const Channel = loadable(() => import('@pages/Channel'));
+const Workspaces = loadable(() => import('@layouts/Workspace'));
 
 const App = () => {
   return (
@@ -19,7 +19,7 @@ const App = () => {
       <Redirect exact path="/" to="/login" />
       <Route path="/login" component={LogIn} />
       <Route path="/signup" component={SignUp} />
-      <Route path="/workspace/channel" component={Channel} />
+      <Route path="/workspace" component={Workspaces} />
     </Switch>
   );
 };
