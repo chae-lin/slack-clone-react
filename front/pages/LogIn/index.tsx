@@ -51,6 +51,8 @@ const LogIn = () => {
         .then(() => {
           // 성공하면 useSWR('/api/users', fetcher 다시 실행되어 data에 내정보가 들어 있음.
           revalidateUser();
+          // revalidate()는 요청을 한번 더 보내서 데이터를 가져오는 단점이 있다.
+          // mutate()는 서버에 요청을 보내지 않고 response.data에 있는 데이터를 가져온다. (요청을 보낼 필요X)
         })
         .catch((error) => {
           setLogInError(error.response?.data?.code === 401);

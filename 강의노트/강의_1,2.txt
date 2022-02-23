@@ -1,0 +1,126 @@
+[기본 셋팅 (MySQL, node 설치)]
+  [MYSQL]
+    - brew services start mysql
+      : mysql 실행
+    - mysql_secure_installation
+      : root 비밀번호 설정
+    - mysql -h localhost -u root -p (앞으로 접속할 때)
+      : mysql에 접속
+- node 14버전(12나 15도 괜찮음)과 MySQL 설치
+  back 폴더에서
+- npm i 
+- .env 파일 생성 (COOKIE_SECRET과 MYSQL_PASSWORD 비밀번호 설정)
+- config/config.json 설정(MYSQL 접속 설정)
+- npx sequelize db:create(스키마 생성)
+- npm run dev 했다가 ctrl + c로 끄기(테이블 생성)
+- npx sequelize db:seed:all (기초 데이터 넣기)
+- npm run dev 입력하면 localhost:3095에서 서버 돌아감
+  : database안에 table 안에 row 들이 있음.
+
+  백엔드 개발자가 API.md와 typings/db.ts를 남겨둔 상황
+
+[프론트엔드 셋팅]
+- front 폴더에서 npm init
+- npm i react
+- npm i react-dom
+- npm i typescript (타입스크립트 사용시)
+- npm i @types/react @types/react-dom (타입스크립트 사용시)
+
+※ 확장자 없이 이름 앞에 .이 붙은 파일은 설정 파일이라 볼 수 있다. (리눅스에서의 .은 숨김 파일 , 뒤에 .js를 붙여도 됨)
+
+- npm i -D eslint (코드검사 도구)
+- npm i -D prettier eslint-plugin-prettier eslint-config-prettier
+- .prettierrc , .eslintrc 생성하여 설정
+- tsconfig.json 는 타입스크립트 사용시 설정
+
+  babel과 webpack 설정
+- webpack.config.ts
+- npm i -D webpack @babel/core babel-loader @babel/preset-env @babel/preset-react
+- npm i -D @types/webpack @types/node @babel/preset-typescript (타입스크립트 사용시 설치)
+  : webpack에 typescript추가, node에 typescript추가
+- npm i style-loader css-loader
+
+  webpack이 .ts 파일을 인식하도록 설정
+- tsconfig-for-webpack-config.json 파일 생성
+- package.json 에 "build": "cross-env TS_NODE_PROJECT=\"tsconfig-for-webpack-config.json\" webpack", 명령어 추가
+  cross-env 는 윈도우와  리눅스에서 전부 돌아가게 하기 위해 (cross-env 가 없으면 리눅스에서만 돌아 감)
+  js로 할 경우 그냥 "build": "webpack"
+- npm i cross-env
+- npm run build
+- npm i ts-node (ts-node 오류 나는 경우)
+
+  핫리로딩 설정 (수정시에 자동으로 업데이트되도록)
+- npm i webpack-dev-server -D
+- npm i webpack-cli
+- npm i -D @types/webpack-dev-server (타임스크립트에서)
+- npm i @pmmmwh/react-refresh-webpack-plugin
+- npm i react-refresh
+- npm i fork-ts-checker-webpack-plugin -D (타임스크립트 검사와 webpack 실행 동시에 돌아가도록)
+- npm run dev로 실행
+
+  리액트 라우터 적용
+- npm i react-router react-router-dom
+- npm i -D @types/react-router @types/react-router-dom
+
+  Code-Splitting 적용 (필요없는 컴포넌트는 처음에 불러오지 않고 필요한 컴포넌트를 그때 그때 불러오도록)
+  : 페이지 단위로 분리, 서버사이드 렌더링이 필요없는 경우
+- npm i @loadable/component
+- npm i --save-dev @types/loadable__component (타임스크립트에서)
+
+  스타일 작업을 위한 emotion 설치
+- npm i @emotion/react @emotion/styled
+- npm i @emotion/babel-plugin (스타일 확장을 위한 플러그인 / 컴포넌트안에 ${컴포넌트명} 으로 스타일 지정 가능하도록)
+
+  axios를 통한 비동기요청
+- npm i axios
+
+  swr 사용
+- npm i swr
+
+
+
+[폴더 구조]
+- pages : 서비스 페이지
+- components : 공통, 짜잘한 컴포넌트
+- layouts : 공통 레이아웃
+
+// redux, jotai, zustand, recoil
+
+
+
+[Note]
+- Redux로 전체적인 상태를 관리
+- 비동기 요청이 있을 때는 Redux-Thunk, Redux-Saga 로 요청을 보낸다.
+- 컴포넌트 내에서만 쓰는 비동기 요청의 경우 리덕스를 적용시 코드가 길어지는 문제가 있어 따로 리덕스로 사용하지 않는 것이 더 좋다.
+- network 탭에서 200번대면은 성공 
+- header 공부@
+- 실제 개발에서는 https 적용!!
+- 프론트랑 백엔드랑 포트가 다를 경우 프론트: POST, 백엔드: OPTIONS 두개의 요청을 보낸다.
+- webpack devserver를 셋팅한 이유
+    - 핫리로딩
+    - historyApiFallback
+    - proxy
+
+    proxy: {
+       // 프론트엔드에서 api로 보내는 요청은 주소를 3095로 바꾸겠다. (3095에서 보내는 것 처럼)
+      '/api/': {
+        target: 'http://localhost:3095',
+        changeOrigin: true,
+        ws: true,
+       },
+    },
+
+swr 사용하기 (=react query랑 같은 역활)
+- 모든 컴포넌트에서 로그인 정보를 갖고 있어야해서 swr사용. (컨텍스트 API대신)
+- get요청에 대한 요청을 저장하고 있음. (때문에 get요청을 한번 더 보내면 된다.)
+- axios에서 요청을 보낼 때 프론트와 백엔드의 도메인 주소가 다르면 쿠키 전달이 안되는데 로그인은 쿠키로 관리. (쿠키는 백엔드에서 생성해서 프론트에서 백엔드로 보내는 것)
+
+저장된 메모리를 초기화할 때
+- 백엔드를 로컬호스트로 돌리고 있는 경우 사용자의 정보를 메모리에 저장하고 있어 서버를 껐다 키면 초기화 됨
+- 백엔드를 못끄는 경우: application → connect.sid(익스프레스의 경우), (세션을 쓰는 경우엔 세션쿠키의 이름을 알려달라해야함) 파일 지우면 초기화 됨
+
+화면에 반영되는 값은 useState
+화면에 반영되지 않는 값은 useRef
+
+let은 같은 컴포넌트의 전역 데이터가 아닌 이상 거의 사용X
+프론트에서 배포의 경우 app.js랑 index.html을 만들어서 전달해주면 됨.
