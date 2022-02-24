@@ -3,14 +3,15 @@ import { CloseModalButton, CreateMenu } from './styles';
 
 interface Props {
   style: CSSProperties;
-  onCloseModal: () => void;
+  onCloseModal: (e: any) => void;
   closeButton?: boolean;
 }
-const Menu: FC<Props> = ({ children, style, onCloseModal, closeButton }) => {
+const Menu: FC<Props> = ({ closeButton, style, children, onCloseModal }) => {
   const stopPropagation = useCallback((e) => {
     // 부모태그로 이벤트가 버블링되지 않음
     e.stopPropagation();
   }, []);
+
   return (
     <CreateMenu onClick={onCloseModal}>
       <div onClick={stopPropagation} style={style}>

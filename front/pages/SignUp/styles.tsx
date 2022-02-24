@@ -18,7 +18,6 @@ export const Form = styled.form`
 `;
 
 export const Label = styled.label`
-  margin-bottom: 16px;
   & > span {
     display: block;
     text-align: left;
