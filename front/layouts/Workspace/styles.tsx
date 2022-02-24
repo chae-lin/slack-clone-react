@@ -4,6 +4,10 @@ export const RightMenu = styled.div`
   float: right;
 `;
 
+export const ProfileBox = styled.span`
+  cursor: pointer;
+`;
+
 export const Header = styled.header`
   height: 38px;
   background: #350d36;
@@ -24,6 +28,7 @@ export const ProfileImg = styled.img`
 export const ProfileModal = styled.div`
   display: flex;
   padding: 20px;
+  text-align: left;
 
   & img {
     display: flex;

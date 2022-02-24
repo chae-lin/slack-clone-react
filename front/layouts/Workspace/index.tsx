@@ -1,6 +1,6 @@
 import fetcher from '@utils/fetcher';
 import axios from 'axios';
-import React, { FC, useCallback } from 'react';
+import React, { FC, useCallback, useState } from 'react';
 import { Redirect, Route, Switch } from 'react-router';
 import useSWR from 'swr';
 // swr에 있는 mutate는 범용적으로 사용할 수 있다. (1번의 요청도 아낄 수 있음)
@@ -15,6 +15,7 @@ import {
   ProfileImg,
   ProfileModal,
   RightMenu,
+  ProfileBox,
   WorkspaceButton,
   WorkspaceModal,
   WorkspaceName,
@@ -22,12 +23,14 @@ import {
   WorkspaceWrapper,
 } from './styles';
 import loadable from '@loadable/component';
+import Menu from '@components/Menu';
 
 const Channel = loadable(() => import('@pages/Channel'));
 const DirectMessage = loadable(() => import('@pages/DirectMessage'));
 
 // children을 쓰는 컴포넌트는 FC, children을 안쓰는 컴포넌트는 VFC가 타입이다.
 const Workspace: FC = ({ children }) => {
+  const [showUserMenu, setShowUserMenu] = useState(false);
   // swr은 컴포넌트간 넘나드는 전역스토리지
   // 요청은 같은 곳으로 보내나 fetcher를 사용하고 싶을 때: 주소뒤에 ? 또는 #을 붙여준다. 'users?' 'users#'
   const { data: userData, mutate: revalidateUser } = useSWR('/api/users', fetcher);
@@ -41,6 +44,10 @@ const Workspace: FC = ({ children }) => {
     });
   }, []);
 
+  const onClickUserProfile = useCallback(() => {
+    setShowUserMenu((prev) => !prev);
+  }, []);
+
   if (userData === false) {
     return <Redirect to="/login" />;
   }
@@ -49,13 +56,24 @@ const Workspace: FC = ({ children }) => {
     <div>
       <Header>
         <RightMenu>
-          <span>
+          <ProfileBox onClick={onClickUserProfile}>
             {/* <ProfileImg src={gravatar.url(userData.email, { s: '28px', d: 'retro' })} alt="" /> */}
             <ProfileImg src="" alt="" />
-          </span>
+            {showUserMenu && (
+              <Menu style={{ right: 0, top: 38 }} onCloseModal={onClickUserProfile}>
+                <ProfileModal>
+                  <img src="" alt="" style={{ width: '36px' }} />
+                  <div>
+                    <span id="pfodile-name">{userData.nickname}</span>
+                    <span id="pfodile-active">active</span>
+                  </div>
+                </ProfileModal>
+                <LogOutButton onClick={onLogOut}>로그아웃</LogOutButton>
+              </Menu>
+            )}
+          </ProfileBox>
         </RightMenu>
       </Header>
-      <button onClick={onLogOut}>로그아웃</button>
       <WorkspaceWrapper>
         <Workspaces>test</Workspaces>
         <Channels>
